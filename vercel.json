@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && npx turbo run build --filter=@vexo/web",
+  "buildCommand": "npx turbo run build --filter=@vexo/web",
   "outputDirectory": "apps/web/out",
   "installCommand": "npm install",
   "framework": null
