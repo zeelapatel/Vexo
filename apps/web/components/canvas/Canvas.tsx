@@ -279,10 +279,10 @@ function CanvasInner({ onOpenIssues }: { onOpenIssues?: () => void }) {
           ⊞
         </ToolbarButton>
         <ToolbarSep />
-        <ToolbarButton title="Undo (Ctrl+Z)" onClick={undo} disabled={!canUndo}>
+        <ToolbarButton title="Undo (Ctrl+Z)" onClick={undo} disabled>
           ↩
         </ToolbarButton>
-        <ToolbarButton title="Redo (Ctrl+Shift+Z)" onClick={redo} disabled={!canRedo}>
+        <ToolbarButton title="Redo (Ctrl+Shift+Z)" onClick={redo} disabled>
           ↪
         </ToolbarButton>
         <div style={{ flex: 1 }} />
