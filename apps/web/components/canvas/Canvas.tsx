@@ -93,7 +93,7 @@ function CanvasInner({ onOpenIssues }: { onOpenIssues?: () => void }) {
   const issueCount = existingIssues.filter((i) => !i.dismissed).length;
 
   useAutoSave();
-  const { undo, redo, canUndo, canRedo } = useUndoRedo();
+  const { undo, redo } = useUndoRedo();
 
   // Pan + zoom to affected nodes when an issue is focused
   useEffect(() => {
