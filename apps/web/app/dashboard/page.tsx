@@ -11,29 +11,29 @@ export default function DashboardPage() {
   const initialize = useAttemptStore((s) => s.initialize);
   const getTotalCompleted = useAttemptStore((s) => s.getTotalCompleted);
   const getAverageScore = useAttemptStore((s) => s.getAverageScore);
+  const getCategoryAverages = useAttemptStore((s) => s.getCategoryAverages);
   const [streak, setStreak] = useState<StreakData | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  const store = useAttemptStore();
-
   useEffect(() => {
+    // Run once on mount — do not include store in deps to avoid infinite loop
     initialize();
-    const streakData = checkStreakOnLoad();
-    setStreak(streakData);
-    const earned = getEarnedAchievements();
-    setAchievements(earned);
-    const recs = getNextRecommendations(store);
-    setRecommendations(recs);
+    setStreak(checkStreakOnLoad());
+    setAchievements(getEarnedAchievements());
+    // Read store state directly after initialize() has run
+    const storeSnapshot = useAttemptStore.getState();
+    setRecommendations(getNextRecommendations(storeSnapshot));
     setLoaded(true);
-  }, [initialize, store]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!loaded) return null;
 
   const totalCompleted = getTotalCompleted();
   const avgScore = getAverageScore();
-  const categoryAverages = store.getCategoryAverages();
+  const categoryAverages = getCategoryAverages();
 
   const statStyle: React.CSSProperties = {
     backgroundColor: '#111115',

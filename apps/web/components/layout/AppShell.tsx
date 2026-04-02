@@ -8,6 +8,7 @@ import { SimulationResultsPanel } from '../panels/SimulationResultsPanel';
 import { IssuesPanel } from '../panels/IssuesPanel';
 import { VersionPanel } from '../panels/VersionPanel';
 import { InterviewMode } from '../interview/InterviewMode';
+import { InterviewOverlay } from '../interview/InterviewOverlay';
 import { FeedbackWidget } from '../ui/FeedbackWidget';
 import { ShortcutOverlay } from '../ui/ShortcutOverlay';
 import { CanvasEmptyState } from '../ui/EmptyState';
@@ -22,6 +23,10 @@ import { useImport } from '@/hooks/useImport';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCanvasStore } from '@/store/canvasStore';
 import { useIssuesStore } from '@/store/issuesStore';
+import { useInterviewStore } from '@/store/interviewStore';
+import { loadActiveAttempt } from '@/store/attemptStore';
+import { useSubmitInterview } from '@/hooks/useSubmitInterview';
+import { getScenarioById } from '@vexo/cbr';
 
 export function AppShell() {
   const { runSimulation } = useSimulation();
@@ -39,9 +44,22 @@ export function AppShell() {
   const { importFromJSON } = useImport();
   const nodes = useCanvasStore((s) => s.nodes);
 
+  const startInterview = useInterviewStore((s) => s.startInterview);
+  const isInterviewActive = useInterviewStore((s) => s.isActive);
+  const { submit: submitInterview } = useSubmitInterview();
+
   useEffect(() => {
     initializeFromStorage();
-  }, [initializeFromStorage]);
+
+    // Resume active interview attempt if one exists in localStorage
+    const active = loadActiveAttempt();
+    if (active && !active.completedAt) {
+      const scenario = getScenarioById(active.scenarioId);
+      if (scenario) {
+        startInterview(active.id, scenario);
+      }
+    }
+  }, [initializeFromStorage, startInterview]);
 
   // Run anti-pattern scanner on canvas changes
   useAntiPatternScanner();
@@ -127,20 +145,25 @@ export function AppShell() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
         <ErrorBoundary>
           <Canvas onOpenIssues={() => setIssuesPanelOpen(true)} />
-          {nodes.length === 0 && (
+          {nodes.length === 0 && !isInterviewActive && (
             <CanvasEmptyState
               onStartInterview={() => setInterviewOpen(true)}
               onImport={importFromJSON}
             />
           )}
+          {isInterviewActive && (
+            <InterviewOverlay onSubmit={submitInterview} />
+          )}
         </ErrorBoundary>
-        <SimulationResultsPanel />
-        <SimulationBar
-          onRunSimulation={runSimulation}
-          onExportPNG={exportToPNG}
-          onExportJSON={exportToJSON}
-          onVersionHistory={() => setVersionPanelOpen(true)}
-        />
+        {!isInterviewActive && <SimulationResultsPanel />}
+        {!isInterviewActive && (
+          <SimulationBar
+            onRunSimulation={runSimulation}
+            onExportPNG={exportToPNG}
+            onExportJSON={exportToJSON}
+            onVersionHistory={() => setVersionPanelOpen(true)}
+          />
+        )}
       </div>
       <IssuesPanel
         open={issuesPanelOpen}

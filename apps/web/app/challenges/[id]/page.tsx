@@ -8,6 +8,7 @@ import type { InterviewScenario } from '@vexo/types';
 import { useAttemptStore, type Attempt } from '@/store/attemptStore';
 import { useCanvasStore } from '@/store/canvasStore';
 import { useDesignStore } from '@/store/designStore';
+import { saveDesignState } from '@/store/persistence';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: '#4ade80',
@@ -56,6 +57,12 @@ export default function ChallengeDetailPage() {
     if (!scenario) return;
     const newDesignId = createDesign();
     setActiveDesign(newDesignId, scenario.starterCanvas.nodes, scenario.starterCanvas.edges);
+    // Persist immediately so initializeFromStorage picks it up after navigation
+    saveDesignState(newDesignId, {
+      nodes: scenario.starterCanvas.nodes,
+      edges: scenario.starterCanvas.edges,
+      viewport: { x: 0, y: 0, zoom: 1 },
+    });
 
     const attempt: Attempt = {
       id: generateId(),
