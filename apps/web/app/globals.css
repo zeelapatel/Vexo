@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-vexo-black: #050507;
+  --color-surface-1: #0C0C0F;
+  --color-surface-2: #111115;
+  --color-surface-3: #16161B;
+  --color-surface-hover: #1C1C22;
+  --color-white: #E8E6E3;
+  --color-white-bright: #F5F3F0;
+  --color-muted: rgba(232, 230, 227, 0.5);
+  --color-muted-2: rgba(232, 230, 227, 0.35);
+  --color-dim: rgba(232, 230, 227, 0.2);
+  --color-accent: #C4F042;
+  --color-accent-dim: rgba(196, 240, 66, 0.15);
+  --color-accent-mid: rgba(196, 240, 66, 0.4);
+  --color-signal-red: #FF4444;
+  --color-signal-red-dim: rgba(255, 68, 68, 0.15);
+  --color-signal-amber: #F5A623;
+  --color-signal-amber-dim: rgba(245, 166, 35, 0.15);
+  --color-signal-blue: #4A9EFF;
+  --color-signal-blue-dim: rgba(74, 158, 255, 0.15);
+  --color-signal-purple: #A855F7;
+  --color-signal-purple-dim: rgba(168, 85, 247, 0.15);
+
+  /* Fonts */
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-serif: var(--font-instrument-serif);
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Letter spacing */
+  --tracking-tightest: -0.04em;
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.08em;
+
+  /* Box shadows */
+  --shadow-accent-glow: 0 0 20px rgba(196, 240, 66, 0.3);
+  --shadow-warn-glow: 0 0 20px rgba(245, 166, 35, 0.3);
+  --shadow-crit-glow: 0 0 20px rgba(255, 68, 68, 0.3);
+  --shadow-cta-hover: 0 4px 24px rgba(196, 240, 66, 0.25);
+}
+
+/* Custom utilities */
+@utility bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #050507;
+  color: #E8E6E3;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
