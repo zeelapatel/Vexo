@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { getComponentIcon } from '@vexo/ui';
 import { ComponentCategory } from '@vexo/types';
 
@@ -21,7 +22,7 @@ const categoryColors: Record<ComponentCategory, { bg: string; color: string }> =
   [ComponentCategory.ClientEdge]: { bg: 'rgba(232,230,227,0.08)', color: 'rgba(232,230,227,0.6)' },
 };
 
-export function NodeIcon({ componentId, category, size = 28 }: NodeIconProps) {
+export const NodeIcon = memo(function NodeIcon({ componentId, category, size = 28 }: NodeIconProps) {
   const Icon = getComponentIcon(componentId, category);
   const colors = categoryColors[category] ?? {
     bg: 'rgba(232,230,227,0.08)',
@@ -46,4 +47,4 @@ export function NodeIcon({ componentId, category, size = 28 }: NodeIconProps) {
       <Icon size={iconSize} />
     </div>
   );
-}
+});

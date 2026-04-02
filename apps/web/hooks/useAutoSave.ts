@@ -2,29 +2,26 @@ import { useEffect, useRef } from 'react';
 import { useCanvasStore } from '@/store/canvasStore';
 import { saveDesignState } from '@/store/persistence';
 
-const SAVE_INTERVAL_MS = 5000;
+const DEBOUNCE_MS = 1500;
 
 export function useAutoSave() {
   const isDirty = useCanvasStore((s) => s.isDirty);
   const markSaved = useCanvasStore((s) => s.markSaved);
   const activeDesignId = useCanvasStore((s) => s.activeDesignId);
-
-  const isDirtyRef = useRef(isDirty);
-  isDirtyRef.current = isDirty;
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isDirtyRef.current) return;
-      const saved = saveDesignState(activeDesignId, {
-        nodes: useCanvasStore.getState().nodes,
-        edges: useCanvasStore.getState().edges,
-        viewport: useCanvasStore.getState().viewport,
-      });
-      if (saved) {
-        markSaved();
-      }
-    }, SAVE_INTERVAL_MS);
+    if (!isDirty) return;
 
-    return () => clearInterval(interval);
-  }, [activeDesignId, markSaved]);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      const { nodes, edges, viewport } = useCanvasStore.getState();
+      const saved = saveDesignState(activeDesignId, { nodes, edges, viewport });
+      if (saved) markSaved();
+    }, DEBOUNCE_MS);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [isDirty, activeDesignId, markSaved]);
 }

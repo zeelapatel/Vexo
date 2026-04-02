@@ -51,13 +51,10 @@ export function propagateLoad(
     const loadPerEdge = nodeResult.incomingLoad / outEdges.length;
 
     for (const targetId of outEdges) {
-      // Find the edge(s) connecting nodeId → targetId
-      const connectingEdges: VexoEdge[] = [];
-      for (const [, edge] of graph.edgeMap) {
-        if (edge.source === nodeId && edge.target === targetId) {
-          connectingEdges.push(edge);
-        }
-      }
+      // Find the edge(s) connecting nodeId → targetId using the pre-built index (O(fan-out))
+      const connectingEdges = (graph.sourceEdges.get(nodeId) ?? []).filter(
+        (e) => e.target === targetId,
+      );
 
       const edge = connectingEdges[0]; // take first if multiple
       const connectionType =

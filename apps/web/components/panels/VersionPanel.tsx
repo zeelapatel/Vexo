@@ -22,8 +22,17 @@ function formatTime(iso: string): string {
 }
 
 export function VersionPanel({ open, onClose }: VersionPanelProps) {
-  const { versions, previewVersionId, setPreviewVersion, revertToVersion, saveVersion, designId } = useVersionStore();
-  const { nodes, edges, viewport, setActiveDesign, activeDesignId } = useCanvasStore();
+  const versions = useVersionStore((s) => s.versions);
+  const previewVersionId = useVersionStore((s) => s.previewVersionId);
+  const setPreviewVersion = useVersionStore((s) => s.setPreviewVersion);
+  const revertToVersion = useVersionStore((s) => s.revertToVersion);
+  const saveVersion = useVersionStore((s) => s.saveVersion);
+  const designId = useVersionStore((s) => s.designId);
+  const nodes = useCanvasStore((s) => s.nodes);
+  const edges = useCanvasStore((s) => s.edges);
+  const viewport = useCanvasStore((s) => s.viewport);
+  const setActiveDesign = useCanvasStore((s) => s.setActiveDesign);
+  const activeDesignId = useCanvasStore((s) => s.activeDesignId);
   const [saveName, setSaveName] = useState('');
   const [showSaveInput, setShowSaveInput] = useState(false);
 

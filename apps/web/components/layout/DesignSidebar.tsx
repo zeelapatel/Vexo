@@ -15,17 +15,15 @@ function formatTime(iso: string): string {
 }
 
 export function DesignSidebar() {
-  const {
-    getActiveDesigns,
-    getDeletedDesigns,
-    activeDesignId,
-    createDesign,
-    switchDesign,
-    renameDesign,
-    duplicateDesign,
-    deleteDesign,
-    restoreDesign,
-  } = useDesignStore();
+  const getActiveDesigns = useDesignStore((s) => s.getActiveDesigns);
+  const getDeletedDesigns = useDesignStore((s) => s.getDeletedDesigns);
+  const activeDesignId = useDesignStore((s) => s.activeDesignId);
+  const createDesign = useDesignStore((s) => s.createDesign);
+  const switchDesign = useDesignStore((s) => s.switchDesign);
+  const renameDesign = useDesignStore((s) => s.renameDesign);
+  const duplicateDesign = useDesignStore((s) => s.duplicateDesign);
+  const deleteDesign = useDesignStore((s) => s.deleteDesign);
+  const restoreDesign = useDesignStore((s) => s.restoreDesign);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [menuId, setMenuId] = useState<string | null>(null);

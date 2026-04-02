@@ -10,8 +10,9 @@ interface ImportError {
 
 export function useImport() {
   const [importError, setImportError] = useState<string | null>(null);
-  const { setActiveDesign } = useCanvasStore();
-  const { createDesign, renameDesign } = useDesignStore();
+  const setActiveDesign = useCanvasStore((s) => s.setActiveDesign);
+  const createDesign = useDesignStore((s) => s.createDesign);
+  const renameDesign = useDesignStore((s) => s.renameDesign);
 
   const importFromJSON = useCallback(() => {
     const input = document.createElement('input');

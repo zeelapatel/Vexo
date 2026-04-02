@@ -5,7 +5,7 @@ import { getBezierPath, EdgeLabelRenderer, type EdgeProps } from '@xyflow/react'
 import type { VexoEdge as VexoEdgeType } from '@vexo/types';
 import { CONNECTION_TYPE_LABELS } from '@vexo/engine';
 import { ConnectionType } from '@vexo/types';
-import { useIssuesStore } from '@/store/issuesStore';
+import { useIssuesStore, selectFocusedIssue } from '@/store/issuesStore';
 import { useCanvasStore } from '@/store/canvasStore';
 
 const edgeStyles: Record<string, { stroke: string; strokeDasharray?: string } | undefined> = {
@@ -37,7 +37,7 @@ export const VexoEdge = memo(function VexoEdge({
     },
     [id, updateEdgeData],
   );
-  const markerId = `arrow-${id}-${Math.random().toString(36).slice(2, 7)}`;
+  const markerId = `arrow-${id}`;
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -48,9 +48,7 @@ export const VexoEdge = memo(function VexoEdge({
   });
 
   // Issue highlight
-  const focusedIssue = useIssuesStore((s) =>
-    s.focusedIssueId ? s.issues.find((i) => i.id === s.focusedIssueId) ?? null : null,
-  );
+  const focusedIssue = useIssuesStore(selectFocusedIssue);
   const isIssueHighlighted = focusedIssue?.affectedEdgeIds?.includes(id) ?? false;
   const issueHighlightColor =
     focusedIssue?.severity === 'critical' ? 'rgba(255,68,68,0.9)' : 'rgba(245,166,35,0.9)';

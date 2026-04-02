@@ -1,14 +1,15 @@
 'use client';
 
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { AlertTriangle, Trash2, Copy } from 'lucide-react';
+import { shallow } from 'zustand/shallow';
 import type { VexoNode as VexoNodeType } from '@vexo/types';
 import { SystemStatus } from '@vexo/types';
 import { NodeIcon } from './NodeIcon';
-import { useSimulationStore } from '@/store/simulationStore';
-import { useIssuesStore } from '@/store/issuesStore';
-import { useCanvasStore } from '@/store/canvasStore';
+import { useSimulationStore, selectIsBottleneck } from '@/store/simulationStore';
+import { useIssuesStore, selectFocusedIssue } from '@/store/issuesStore';
+import { useCanvasStore, selectNodeEdgeValidation } from '@/store/canvasStore';
 
 const statusColors: Record<SystemStatus, string> = {
   [SystemStatus.Healthy]: '#C4F042',
@@ -37,14 +38,11 @@ export const VexoNode = memo(function VexoNode({ data, selected, id }: NodeProps
 
   // Live simulation results
   const simResult = useSimulationStore((s) => s.nodeResults[id]);
-  const bottleneckPath = useSimulationStore((s) => s.bottleneckPath);
-  const isBottleneck =
-    bottleneckPath.includes(id) && bottleneckPath[bottleneckPath.length - 1] === id;
+  const isBottleneckSelector = useMemo(() => selectIsBottleneck(id), [id]);
+  const isBottleneck = useSimulationStore(isBottleneckSelector);
 
   // Issue highlight
-  const focusedIssue = useIssuesStore((s) =>
-    s.focusedIssueId ? s.issues.find((i) => i.id === s.focusedIssueId) ?? null : null,
-  );
+  const focusedIssue = useIssuesStore(selectFocusedIssue);
   const isIssueHighlighted = focusedIssue?.affectedNodeIds?.includes(id) ?? false;
   const issueHighlightSeverity = isIssueHighlighted ? focusedIssue!.severity : null;
   const issueColor =
@@ -69,13 +67,9 @@ export const VexoNode = memo(function VexoNode({ data, selected, id }: NodeProps
     });
   }, [id]);
 
-  // Edge validation badges — check if any connected edge has a problem
-  const hasBlockedEdge = useCanvasStore(
-    (s) => s.edges.some((e) => (e.source === id || e.target === id) && e.data?.validationStatus === 'blocked'),
-  );
-  const hasWarnedEdge = useCanvasStore(
-    (s) => s.edges.some((e) => (e.source === id || e.target === id) && e.data?.validationStatus === 'warned'),
-  );
+  // Edge validation badges — single pass via selector, shallow-compared to avoid re-renders
+  const edgeValidationSelector = useMemo(() => selectNodeEdgeValidation(id), [id]);
+  const { hasBlockedEdge, hasWarnedEdge } = useCanvasStore(edgeValidationSelector, shallow);
   const edgeBadgeSeverity = hasBlockedEdge ? 'blocked' : hasWarnedEdge ? 'warned' : null;
 
   const status = simResult?.status ?? nodeStatus;
@@ -130,21 +124,6 @@ export const VexoNode = memo(function VexoNode({ data, selected, id }: NodeProps
         animation,
       }}
     >
-      <style>{`
-        @keyframes bottleneckPulse {
-          0%, 100% { box-shadow: 0 0 0 2px #FF4444, 0 0 24px rgba(255,68,68,0.4); }
-          50% { box-shadow: 0 0 0 2px #FF4444, 0 0 40px rgba(255,68,68,0.7); }
-        }
-        @keyframes issuePulseWarning {
-          0%, 100% { box-shadow: 0 0 0 2px rgba(245,166,35,0.85), 0 0 14px rgba(245,166,35,0.25); }
-          50% { box-shadow: 0 0 0 2px rgba(245,166,35,0.85), 0 0 28px rgba(245,166,35,0.55); }
-        }
-        @keyframes issuePulseCritical {
-          0%, 100% { box-shadow: 0 0 0 2px rgba(255,68,68,0.85), 0 0 14px rgba(255,68,68,0.25); }
-          50% { box-shadow: 0 0 0 2px rgba(255,68,68,0.85), 0 0 28px rgba(255,68,68,0.55); }
-        }
-      `}</style>
-
       {/* Floating action bar — appears above node when selected */}
       {selected && (
         <div

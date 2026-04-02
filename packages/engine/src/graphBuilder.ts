@@ -6,6 +6,8 @@ export interface SimulationGraph {
   inDegree: Map<string, number>;
   nodeMap: Map<string, VexoNode>;
   edgeMap: Map<string, VexoEdge>;
+  /** Pre-built index: source node id → edges originating from that node */
+  sourceEdges: Map<string, VexoEdge[]>;
   /** Nodes in topological order (Kahn's algorithm) */
   sortedOrder: string[];
   /** Nodes with no incoming edges */
@@ -28,12 +30,16 @@ export function buildGraph(nodes: VexoNode[], edges: VexoEdge[]): SimulationGrap
     inDegree.set(node.id, 0);
   }
 
-  // Build adjacency lists
+  // Build adjacency lists and source-edge index in one pass
+  const sourceEdges = new Map<string, VexoEdge[]>();
   for (const edge of edges) {
     if (!nodeMap.has(edge.source) || !nodeMap.has(edge.target)) continue;
     adjacencyList.get(edge.source)!.push(edge.target);
     reverseAdjacency.get(edge.target)!.push(edge.source);
     inDegree.set(edge.target, (inDegree.get(edge.target) ?? 0) + 1);
+    const list = sourceEdges.get(edge.source) ?? [];
+    list.push(edge);
+    sourceEdges.set(edge.source, list);
   }
 
   // Source nodes = inDegree 0
@@ -66,6 +72,7 @@ export function buildGraph(nodes: VexoNode[], edges: VexoEdge[]): SimulationGrap
     inDegree,
     nodeMap,
     edgeMap,
+    sourceEdges,
     sortedOrder,
     sourceNodes,
     cycleDetected,

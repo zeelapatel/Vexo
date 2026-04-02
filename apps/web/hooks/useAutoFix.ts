@@ -12,23 +12,20 @@ import type { VexoNode, VexoEdge } from '@vexo/types';
 const scanner = new AntiPatternScanner([...ANTI_PATTERNS_1, ...ANTI_PATTERNS_2]);
 
 export function useAutoFix() {
-  const { addNode, addEdge, removeNode, removeEdge, updateNodeData } = useCanvasStore();
-
-  const applyMutation = useCallback(
-    (mutation: GraphMutation) => {
-      // Remove nodes (also removes their edges via store)
-      mutation.removeNodes?.forEach((id) => removeNode(id));
-      // Remove edges
-      mutation.removeEdges?.forEach((id) => removeEdge(id));
-      // Add nodes
-      mutation.addNodes?.forEach((node) => addNode(node as VexoNode));
-      // Add edges
-      mutation.addEdges?.forEach((edge) => addEdge(edge as VexoEdge));
-      // Modify nodes
-      mutation.modifyNodes?.forEach(({ id, data }) => updateNodeData(id, data));
-    },
-    [addNode, addEdge, removeNode, removeEdge, updateNodeData],
-  );
+  const applyMutation = useCallback((mutation: GraphMutation) => {
+    const { addNode, addEdge, removeNode, removeEdge, updateNodeData } =
+      useCanvasStore.getState();
+    // Remove nodes (also removes their edges via store)
+    mutation.removeNodes?.forEach((id) => removeNode(id));
+    // Remove edges
+    mutation.removeEdges?.forEach((id) => removeEdge(id));
+    // Add nodes
+    mutation.addNodes?.forEach((node) => addNode(node as VexoNode));
+    // Add edges
+    mutation.addEdges?.forEach((edge) => addEdge(edge as VexoEdge));
+    // Modify nodes
+    mutation.modifyNodes?.forEach(({ id, data }) => updateNodeData(id, data));
+  }, []);
 
   const runAutoFix = useCallback(
     (patternId: string) => {

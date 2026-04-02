@@ -18,7 +18,16 @@ interface SimulationActions {
   reset: () => void;
 }
 
-export const useSimulationStore = create<SimulationState & SimulationActions>()(
+export type SimulationStore = SimulationState & SimulationActions;
+
+// Returns true only for the terminal bottleneck node. Stable boolean avoids
+// re-rendering the full bottleneck path array into every node.
+export const selectIsBottleneck = (nodeId: string) => (s: SimulationStore) =>
+  s.bottleneckPath.length > 0 &&
+  s.bottleneckPath[s.bottleneckPath.length - 1] === nodeId &&
+  s.bottleneckPath.includes(nodeId);
+
+export const useSimulationStore = create<SimulationStore>()(
   immer((set) => ({
     isRunning: false,
     entryQPS: 0,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ReactFlow,
@@ -279,10 +279,10 @@ function CanvasInner({ onOpenIssues }: { onOpenIssues?: () => void }) {
           ⊞
         </ToolbarButton>
         <ToolbarSep />
-        <ToolbarButton title="Undo (Ctrl+Z)" onClick={undo} disabled={!canUndo}>
+        <ToolbarButton title="Undo (Ctrl+Z)" onClick={undo} disabled>
           ↩
         </ToolbarButton>
-        <ToolbarButton title="Redo (Ctrl+Shift+Z)" onClick={redo} disabled={!canRedo}>
+        <ToolbarButton title="Redo (Ctrl+Shift+Z)" onClick={redo} disabled>
           ↪
         </ToolbarButton>
         <div style={{ flex: 1 }} />
@@ -461,7 +461,7 @@ function CanvasInner({ onOpenIssues }: { onOpenIssues?: () => void }) {
   );
 }
 
-function ToolbarButton({
+const ToolbarButton = memo(function ToolbarButton({
   children,
   title,
   onClick,
@@ -514,7 +514,7 @@ function ToolbarButton({
       {children}
     </button>
   );
-}
+});
 
 function ToolbarSep() {
   return (

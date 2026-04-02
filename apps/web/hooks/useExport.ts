@@ -14,7 +14,7 @@ export function useExport({ fitViewFn, setViewportFn }: ExportOptions = {}) {
   const edges = useCanvasStore((s) => s.edges);
   const viewport = useCanvasStore((s) => s.viewport);
   const activeDesignId = useCanvasStore((s) => s.activeDesignId);
-  const { designs } = useDesignStore();
+  const designs = useDesignStore((s) => s.designs);
 
   const getDesignName = useCallback(() => {
     const design = designs.get(activeDesignId);

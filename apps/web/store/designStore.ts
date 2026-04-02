@@ -155,9 +155,6 @@ export const useDesignStore = create<DesignStore>()(
       useCanvasStore.temporal.getState().clear();
       set((state) => {
         state.activeDesignId = id;
-      });
-      // Update updatedAt
-      set((state) => {
         const design = state.designs.get(id);
         if (design) design.updatedAt = new Date().toISOString();
       });

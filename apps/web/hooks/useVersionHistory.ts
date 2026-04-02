@@ -5,7 +5,8 @@ import { useCanvasStore } from '@/store/canvasStore';
 const AUTO_SAVE_INTERVAL = 10 * 60 * 1000; // 10 minutes
 
 export function useVersionHistory() {
-  const { saveVersion, loadVersions } = useVersionStore();
+  const saveVersion = useVersionStore((s) => s.saveVersion);
+  const loadVersions = useVersionStore((s) => s.loadVersions);
   const nodes = useCanvasStore((s) => s.nodes);
   const edges = useCanvasStore((s) => s.edges);
   const viewport = useCanvasStore((s) => s.viewport);

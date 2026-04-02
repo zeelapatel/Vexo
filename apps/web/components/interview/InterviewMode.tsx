@@ -23,8 +23,8 @@ export function InterviewMode({ open, onClose }: InterviewModeProps) {
   const [hintsRevealed, setHintsRevealed] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
-  const { setActiveDesign } = useCanvasStore();
-  const { createDesign } = useDesignStore();
+  const setActiveDesign = useCanvasStore((s) => s.setActiveDesign);
+  const createDesign = useDesignStore((s) => s.createDesign);
 
   useEffect(() => {
     if (!running) return;

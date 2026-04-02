@@ -62,7 +62,11 @@ function MetricCard({ label, value, unit, context, color }: MetricCardProps) {
 
 export function SimulationResultsPanel() {
   const [expanded, setExpanded] = useState(false);
-  const { nodeResults, bottleneckPath, totalLatency, warnings, isRunning } = useSimulationStore();
+  const nodeResults = useSimulationStore((s) => s.nodeResults);
+  const bottleneckPath = useSimulationStore((s) => s.bottleneckPath);
+  const totalLatency = useSimulationStore((s) => s.totalLatency);
+  const warnings = useSimulationStore((s) => s.warnings);
+  const isRunning = useSimulationStore((s) => s.isRunning);
   const nodes = useCanvasStore((s) => s.nodes);
   const entryQPS = useSimulationStore((s) => s.entryQPS);
 

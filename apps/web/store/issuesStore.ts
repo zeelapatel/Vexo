@@ -27,7 +27,14 @@ interface IssuesActions {
   setFocusedIssue: (id: string | null) => void;
 }
 
-export const useIssuesStore = create<IssuesState & IssuesActions>()(
+export type IssuesStore = IssuesState & IssuesActions;
+
+// Returns the focused Issue object (or null). Run once at a parent level
+// instead of once per node/edge to avoid N linear searches.
+export const selectFocusedIssue = (s: IssuesStore) =>
+  s.focusedIssueId ? (s.issues.find((i) => i.id === s.focusedIssueId) ?? null) : null;
+
+export const useIssuesStore = create<IssuesStore>()(
   immer((set) => ({
     issues: [],
     focusedIssueId: null,

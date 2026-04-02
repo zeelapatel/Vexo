@@ -168,3 +168,18 @@ export const selectEdges = (s: CanvasStore) => s.edges;
 export const selectSelectedNodeId = (s: CanvasStore) => s.selectedNodeId;
 export const selectSelectedNode = (s: CanvasStore) =>
   s.selectedNodeId ? s.nodes.find((n) => n.id === s.selectedNodeId) ?? null : null;
+
+// Returns { hasBlockedEdge, hasWarnedEdge } for a given node in a single O(E) pass.
+// Use with shallow comparison to avoid re-renders when values don't change.
+export const selectNodeEdgeValidation = (nodeId: string) => (s: CanvasStore) => {
+  let hasBlocked = false;
+  let hasWarned = false;
+  for (const e of s.edges) {
+    if (e.source === nodeId || e.target === nodeId) {
+      if (e.data?.validationStatus === 'blocked') hasBlocked = true;
+      if (e.data?.validationStatus === 'warned') hasWarned = true;
+    }
+    if (hasBlocked && hasWarned) break;
+  }
+  return { hasBlockedEdge: hasBlocked, hasWarnedEdge: hasWarned };
+};

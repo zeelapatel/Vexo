@@ -160,7 +160,10 @@ function IssueCard({
 }
 
 export function IssuesPanel({ open, onClose, onAutoFix }: IssuesPanelProps) {
-  const { issues, dismissIssue, focusedIssueId, setFocusedIssue } = useIssuesStore();
+  const issues = useIssuesStore((s) => s.issues);
+  const dismissIssue = useIssuesStore((s) => s.dismissIssue);
+  const focusedIssueId = useIssuesStore((s) => s.focusedIssueId);
+  const setFocusedIssue = useIssuesStore((s) => s.setFocusedIssue);
   const activeIssues = issues.filter((i) => !i.dismissed);
   const warnings = activeIssues.filter((i) => i.type === 'connection_warning');
   const antipatterns = activeIssues.filter((i) => i.type === 'antipattern');
