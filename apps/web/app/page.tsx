@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Vexo — Design. Simulate. Stress-test.',
-  description: 'The first platform that lets you simulate distributed systems in real time. 92 components, live load simulation, anti-pattern detection.',
+  title: 'Vexo — Master System Design Interviews',
+  description: 'The only platform where you design, simulate, and get graded by an AI interviewer in real time. 52 challenges from beginner to FAANG-level. No login required.',
   openGraph: {
-    title: 'Vexo — Visual System Design & Live Load Simulation',
-    description: 'Design, simulate, and stress-test distributed systems in your browser. No login required.',
+    title: 'Vexo — Master System Design Interviews',
+    description: 'Design, simulate, and get graded by an AI interviewer. 52 system design challenges, no login required.',
     type: 'website',
   },
-  twitter: { card: 'summary_large_image', title: 'Vexo', description: 'Design. Simulate. Stress-test distributed systems.' },
+  twitter: { card: 'summary_large_image', title: 'Vexo', description: 'Master System Design Interviews with AI-powered feedback.' },
 };
 
 export default function LandingPage() {
@@ -18,11 +18,12 @@ export default function LandingPage() {
       {/* Nav */}
       <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 48px', borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'sticky', top: 0, backgroundColor: 'rgba(5,5,7,0.95)', backdropFilter: 'blur(12px)', zIndex: 10 }}>
         <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.04em', color: '#F5F3F0' }}>Vexo</span>
-        <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <Link href="/challenges" style={{ fontSize: 13, color: 'rgba(232,230,227,0.5)', textDecoration: 'none' }}>Challenges</Link>
+          <Link href="/dashboard" style={{ fontSize: 13, color: 'rgba(232,230,227,0.5)', textDecoration: 'none' }}>Dashboard</Link>
           <Link href="/terms" style={{ fontSize: 13, color: 'rgba(232,230,227,0.5)', textDecoration: 'none' }}>Terms</Link>
-          <Link href="/privacy" style={{ fontSize: 13, color: 'rgba(232,230,227,0.5)', textDecoration: 'none' }}>Privacy</Link>
           <Link href="/canvas" style={{ backgroundColor: '#C4F042', color: '#050507', fontSize: 13, fontWeight: 600, padding: '8px 18px', borderRadius: 7, textDecoration: 'none' }}>
-            Launch App
+            Open Canvas
           </Link>
         </div>
       </nav>
@@ -30,23 +31,31 @@ export default function LandingPage() {
       {/* Hero */}
       <section style={{ textAlign: 'center', padding: '120px 24px 80px', maxWidth: 800, margin: '0 auto' }}>
         <div style={{ display: 'inline-block', backgroundColor: 'rgba(196,240,66,0.1)', border: '1px solid rgba(196,240,66,0.2)', borderRadius: 20, padding: '4px 14px', fontSize: 12, color: '#C4F042', marginBottom: 28, fontFamily: 'var(--font-ibm-plex-mono, monospace)' }}>
-          No login required · Runs in your browser
+          52 challenges · AI interviewer · No login required
         </div>
         <h1 style={{ fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 700, letterSpacing: '-0.04em', lineHeight: 1.05, color: '#F5F3F0', margin: '0 0 24px' }}>
-          Design. Simulate.<br />
-          <span style={{ color: '#C4F042' }}>Stress-test.</span>
+          Master System Design<br />
+          <span style={{ color: '#C4F042' }}>Interviews.</span>
         </h1>
-        <p style={{ fontSize: 20, color: 'rgba(232,230,227,0.6)', lineHeight: 1.6, maxWidth: 560, margin: '0 auto 40px', fontWeight: 400 }}>
-          The first platform that lets you simulate distributed systems in real time — 92 components, live load propagation, and anti-pattern detection built in.
+        <p style={{ fontSize: 20, color: 'rgba(232,230,227,0.6)', lineHeight: 1.6, maxWidth: 580, margin: '0 auto 40px', fontWeight: 400 }}>
+          The only platform where you design, simulate, and get graded by an AI interviewer — in real time. 52 challenges from URL Shortener to Netflix CDN. No login, no setup.
         </p>
-        <Link
-          href="/canvas"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 10, backgroundColor: '#C4F042', color: '#050507', fontSize: 16, fontWeight: 600, padding: '14px 32px', borderRadius: 10, textDecoration: 'none', letterSpacing: '-0.01em' }}
-        >
-          Start Building — No Login Required
-        </Link>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link
+            href="/challenges"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, backgroundColor: '#C4F042', color: '#050507', fontSize: 16, fontWeight: 600, padding: '14px 32px', borderRadius: 10, textDecoration: 'none', letterSpacing: '-0.01em' }}
+          >
+            Start Practising — Free
+          </Link>
+          <Link
+            href="/canvas"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, backgroundColor: 'rgba(255,255,255,0.06)', color: '#E8E6E3', fontSize: 16, fontWeight: 500, padding: '14px 28px', borderRadius: 10, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            Try the Canvas
+          </Link>
+        </div>
         <p style={{ marginTop: 16, fontSize: 12, color: 'rgba(232,230,227,0.3)', fontFamily: 'var(--font-ibm-plex-mono, monospace)' }}>
-          Everything saves locally. Your designs are yours.
+          Everything runs locally. No accounts, no tracking.
         </p>
       </section>
 
@@ -62,7 +71,9 @@ export default function LandingPage() {
             { icon: '🔗', title: 'Connection Intelligence', body: '13 connection types with hard blocks, soft warnings, and context-aware rules. The canvas tells you when something is wrong.' },
             { icon: '🔥', title: '20 Anti-Pattern Detectors', body: 'Catches Client-Direct-DB, SPOF Database, No DLQ, N+1 queries, and 16 more. Auto-fix for the unambiguous ones.' },
             { icon: '💀', title: 'Failure Simulation', body: '8 preset failure scenarios: kill the primary DB, take down an AZ, network partition. See the cascade in real time.' },
-            { icon: '🎯', title: 'Interview Mode', body: '10 classic system design challenges with progressive hints and a timer. Practice before the interview.' },
+            { icon: '🎯', title: '52 Interview Challenges', body: 'From beginner (URL Shortener) to FAANG-level (Netflix CDN, Google Search Index). Progressive hints and timed mode.' },
+          { icon: '🤖', title: 'AI Interviewer', body: 'Claude watches your canvas in real-time, asks probing questions, and provides qualitative feedback alongside your rubric score.' },
+          { icon: '📊', title: 'Detailed Scoring', body: '5-dimension rubric: Completeness, Scalability, Availability, Data Model, Trade-offs. Every score traces to an inspectable formula.' },
           ].map((f) => (
             <div key={f.title} style={{ backgroundColor: '#0C0C0F', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: '24px 20px' }}>
               <div style={{ fontSize: 28, marginBottom: 12 }}>{f.icon}</div>

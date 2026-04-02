@@ -9,3 +9,5 @@ export * from './failureSimulator';
 export * from './connectionInference';
 export * from './validation';
 export * from './antipatterns';
+export * from './scoring/types';
+export * from './scoring/scorer';
